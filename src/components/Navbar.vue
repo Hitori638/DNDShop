@@ -1,8 +1,8 @@
+<!-- Navbar.vue -->
 <template>
   <v-app-bar app color="primary" dark>
     <v-toolbar-title class="mr-4">DnDice.com</v-toolbar-title>
     
-
     <v-btn
       text
       v-for="category in categories"
@@ -12,30 +12,25 @@
     >
       {{ category }}
     </v-btn>
-
  
     <v-spacer></v-spacer>
 
-
     <v-autocomplete
-  v-model="search"
-  :items="filteredProducts"
-  item-text="name"
-  item-value="id"
-  placeholder="Search products"
-  @input="searchProducts"
-  
->
-  <template v-slot:selection="{ item }">
-    {{ item.name }}
-  </template>
-</v-autocomplete>
-
-
+      v-model="search"
+      :items="filteredProducts"
+      item-text="name"
+      item-value="id"
+      placeholder="Search products"
+      @input="searchProducts"
+    >
+      <template v-slot:selection="{ item }">
+        {{ item.name }}
+      </template>
+    </v-autocomplete>
 
     <v-btn icon @click="toggleCart" class="ml-2">
       <v-icon>mdi-cart</v-icon>
-      <v-badge :content="cartItemsCount" overlap color="red" class="ml-2"></v-badge>
+      <v-badge :content="totalCartItemsQuantity" overlap color="red" class="ml-2"></v-badge>
     </v-btn>
   </v-app-bar>
 </template>
@@ -56,8 +51,8 @@ export default {
     store() {
       return useProductStore();
     },
-    cartItemsCount() {
-      return this.store.cartItems.length;
+    totalCartItemsQuantity() {
+      return this.store.cartItems.reduce((total, item) => total + item.quantity, 0);
     },
     products() {
       return this.store.products;
@@ -66,25 +61,26 @@ export default {
       return this.store.categories;
     },
     filteredProducts() {
+      const searchQuery = this.search ?? '';
 
-  const searchQuery = this.search ?? '';
-
-
-  return this.products
-    .filter(product => product.name.toLowerCase().includes(searchQuery.toLowerCase()))
-    .map(product => product.name); 
-},
-
-
+      return this.products
+        .filter(product => product.name.toLowerCase().includes(searchQuery.toLowerCase()))
+        .map(product => product.name); 
+    },
   },
   methods: {
     toggleCart() {
       this.$emit('toggle-cart');
     },
     navigate(category) {
-      this.$emit('navigate', category);
+      // Check if the category is already 'Home', to avoid unnecessary navigation
+      if (category !== 'Home') {
+        this.$router.push({ name: 'Home' });
+      }
     },
-    
+    searchProducts() {
+      // Add search functionality if needed
+    },
   },
 };
 </script>

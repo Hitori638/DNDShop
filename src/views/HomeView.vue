@@ -1,11 +1,7 @@
-<!-- HomeView.vue -->
-
 <template>
   <v-app>
-    <Navbar
-      @toggle-cart="toggleCartDrawer"
-    />
-    <Slideshow/>
+    <Navbar @toggle-cart="toggleCartDrawer" :currentCategory="currentCategory" />
+    <Slideshow />
     <v-container class="mt-8">
       <!-- Special offers -->
       <v-row class="mt-4">
@@ -39,10 +35,7 @@
           md="4"
           class="product-card"
         >
-          <product-card
-            :product="product"
-            @add-to-cart="addToCart"
-          />
+          <product-card :product="product" @add-to-cart="addToCart" />
         </v-col>
       </v-row>
     </v-container>
@@ -57,30 +50,39 @@
         lg="4"
         class="category-card"
       >
-        <category-card
-          :category="{ name: category, image: 'https://via.placeholder.com/400x300' }"
-          @view-category="navigate"
-        />
+        <category-card :category="{ name: category, image: 'https://via.placeholder.com/400x300' }" @view-category="navigate" />
       </v-col>
     </v-row>
 
-    <!-- Cart Drawer -->
-    <v-navigation-drawer location="right" v-model="isCartDrawerOpen" app right temporary>
-      <v-container>
-        <h2>Your Shopping Cart</h2>
-        <v-list>
-          <v-list-item-group v-if="cartItems.length > 0">
-            <v-list-item v-for="item in cartItems" :key="item.id">
-              <v-list-item-content>{{ item.name }} - {{ item.price }}</v-list-item-content>
-            </v-list-item>
-          </v-list-item-group>
-          <v-list-item v-else>
-            <v-list-item-content>No items in the cart</v-list-item-content>
-          </v-list-item>
-        </v-list>
-        <v-btn color="primary" @click="proceedToCheckout">Proceed to Checkout</v-btn>
-      </v-container>
-    </v-navigation-drawer>
+   <!-- Cart Drawer -->
+<v-navigation-drawer location="right" v-model="isCartDrawerOpen" app right temporary>
+  <v-container>
+    <h2>Your Shopping Cart</h2>
+    <v-list>
+      <v-list-item-group v-if="cartItems.length > 0">
+        <v-list-item v-for="item in cartItems" :key="item.id">
+          <v-list-item-content>
+            {{ item.name }} - {{ item.price }} - Quantity: {{ item.quantity }}
+          </v-list-item-content>
+        </v-list-item>
+      </v-list-item-group>
+      <v-list-item v-else>
+        <v-list-item-content>No items in the cart</v-list-item-content>
+      </v-list-item>
+    </v-list>
+    <v-divider></v-divider>
+    <v-list>
+      <v-list-item>
+        <v-list-item-content>
+          <v-list-item-title>Total Amount:</v-list-item-title>
+          <v-list-item-subtitle>${{ totalAmount }}</v-list-item-subtitle>
+        </v-list-item-content>
+      </v-list-item>
+    </v-list>
+    <v-btn color="primary" @click="proceedToCheckout">Proceed to Checkout</v-btn>
+  </v-container>
+</v-navigation-drawer>
+
   </v-app>
 </template>
 
@@ -89,8 +91,7 @@ import ProductCard from '@/components/ProductCard.vue';
 import CategoryCard from '@/components/CategoryCard.vue';
 import Navbar from '@/components/Navbar.vue';
 import { useProductStore } from '@/stores/store';
-import Slideshow from '@/components/Slideshow.vue'; 
-
+import Slideshow from '@/components/Slideshow.vue';
 
 export default {
   name: "HomeView",
@@ -128,19 +129,36 @@ export default {
     cartItems() {
       return useProductStore().cartItems;
     },
+    totalAmount() {
+  return this.cartItems.reduce((total, item) => {
+    // Remove the dollar sign and parse the price as a float
+    const itemPrice = parseFloat(item.price.replace('$', ''));
+
+    const itemQuantity = item.quantity;
+
+    // Check if itemPrice is a valid number
+    if (!isNaN(itemPrice)) {
+      return total + itemPrice * itemQuantity;
+    } else {
+      console.error(`Invalid price for item ${item.name}: ${item.price}`);
+      return total;
+    }
+  }, 0).toFixed(2);
+},
+
+
   },
   methods: {
     addToCart(product) {
-      useProductStore().addToCart(product);
+      // Add the product with quantity set to 1
+      useProductStore().addToCart({ ...product, quantity: 1 });
     },
     proceedToCheckout() {
-      // Implement the checkout logic here
+      this.$router.push('/cart');
     },
     navigate(category) {
       this.currentCategory = category;
-      // Implement navigation logic for the selected category
     },
-    
     toggleCartDrawer() {
       this.isCartDrawerOpen = !this.isCartDrawerOpen;
     },
@@ -153,7 +171,6 @@ export default {
 </script>
 
 <style scoped>
-
 .product-card {
   margin-bottom: 20px; 
 }

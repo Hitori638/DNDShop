@@ -1,3 +1,4 @@
+<!-- Slideshow.vue -->
 <template>
     <div>
       <v-carousel>
@@ -21,7 +22,7 @@
             id: 2,
             image: "https://via.placeholder.com/800x400",
           },
-          // Add more slides as needed
+
         ],
       };
     },
@@ -29,6 +30,6 @@
   </script>
   
   <style scoped>
-  /* Add styling for the slideshow if necessary */
+
   </style>
   
