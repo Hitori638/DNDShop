@@ -50,7 +50,7 @@ export default {
   if (category.toLowerCase() === 'home') {
     this.$router.push('/');
   } else if (category !== this.currentCategory) {
-    // Encode the category name before navigating
+
     const encodedCategory = encodeURIComponent(category.toLowerCase());
     this.$router.push({ name: 'category-view', params: { categoryName: encodedCategory } });
   }

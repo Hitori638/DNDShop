@@ -70,13 +70,25 @@ export default {
       return useProductStore();
     },
     filteredProducts() {
-      const categoryName = decodeURI( this.$route.params.categoryName.toLowerCase());
-      console.log('Current Category:', categoryName);
+  const categoryName = decodeURI(this.$route.params.categoryName.toLowerCase());
+  console.log('Current Category:', categoryName);
 
-      const filtered = this.store.products.filter(product => product.category.toLowerCase() === categoryName);
-      console.log('Filtered Products:', filtered);
-      return filtered;
-    },
+  let filtered;
+
+  if (categoryName === 'offers') {
+ 
+    filtered = this.store.products.filter(product => product.offer === true);
+    console.log('Filtered Products (Offer):', filtered);
+  } else {
+    
+    filtered = this.store.products.filter(product => product.category.toLowerCase() === categoryName);
+    console.log('Filtered Products:', filtered);
+  }
+
+  return filtered;
+},
+
+
     cartItems() {
       return useProductStore().cartItems;
     },
@@ -96,7 +108,7 @@ export default {
   },
   methods: {
     addToCart(product) {
-      const quantity = 1; 
+      const quantity = 1;
       this.store.addToCart({ ...product, quantity });
     },
     proceedToCheckout() {
@@ -112,8 +124,3 @@ export default {
   },
 };
 </script>
-
-
-<style scoped>
-/* Add any necessary styling for your component */
-</style>

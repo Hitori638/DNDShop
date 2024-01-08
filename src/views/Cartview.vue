@@ -1,5 +1,5 @@
 <template>
-    <v-app>
+  <v-app>
     <Navbar @toggle-cart="toggleCartDrawer" />
     <div class="cart-container">
       <h2>Your Cart</h2>
@@ -27,57 +27,82 @@
           <p>Total Items: {{ totalItems }}</p>
           <p>Total Price: ${{ totalPrice }}</p>
         </div>
+
+        <!-- Payment Button -->
+        <button @click="proceedToPayment" class="proceed-to-payment-button">
+          Proceed to Payment
+        </button>
       </div>
     </div>
     <Footer />
-</v-app>
-  </template>
-  
-  <script>
-  import { useProductStore } from '@/stores/store';
-  import Navbar from '@/components/Navbar.vue';
-  import Footer from '@/components/Footer.vue';
-  
-  export default {
-    components: {
-      Navbar,
-      Footer,
+  </v-app>
+</template>
+
+<script>
+import { useProductStore } from '@/stores/store';
+import Navbar from '@/components/Navbar.vue';
+import Footer from '@/components/Footer.vue';
+import { useRouter } from 'vue-router'; // Import the router
+
+export default {
+  components: {
+    Navbar,
+    Footer,
+  },
+  computed: {
+    cartItems() {
+      return useProductStore().cartItems;
     },
-    computed: {
-      cartItems() {
-        return useProductStore().cartItems;
-      },
-      totalItems() {
-        return this.cartItems.reduce((total, item) => total + item.quantity, 0);
-      },
-      totalPrice() {
-        return this.cartItems.reduce((total, item) => {
-          const itemPrice = parseFloat(item.price.replace('$', ''));
-          const itemQuantity = item.quantity;
-  
-          if (!isNaN(itemPrice)) {
-            return total + itemPrice * itemQuantity;
-          } else {
-            console.error(`Invalid price for item ${item.name}: ${item.price}`);
-            return total;
-          }
-        }, 0).toFixed(2);
-      },
+    totalItems() {
+      return this.cartItems.reduce((total, item) => total + item.quantity, 0);
     },
-    methods: {
-      removeFromCart(productId) {
-        useProductStore().removeFromCart(productId);
-      },
+    totalPrice() {
+      return this.cartItems.reduce((total, item) => {
+        const itemPrice = parseFloat(item.price.replace('$', ''));
+        const itemQuantity = item.quantity;
+
+        if (!isNaN(itemPrice)) {
+          return total + itemPrice * itemQuantity;
+        } else {
+          console.error(`Invalid price for item ${item.name}: ${item.price}`);
+          return total;
+        }
+      }, 0).toFixed(2);
     },
-    created() {
-      useProductStore().fetchProducts();
-      useProductStore().initializeStore(); // Load cart from local storage
+  },
+  methods: {
+    removeFromCart(productId) {
+      useProductStore().removeFromCart(productId);
     },
-  };
-  </script>
+    proceedToPayment() {
+      // Redirect to the checkout view when the payment button is clicked
+      this.$router.push('/checkout');
+    },
+  },
+  created() {
+    useProductStore().fetchProducts();
+    useProductStore().initializeStore();
+  },
+};
+</script>
   
   
   <style scoped>
+
+.proceed-to-payment-button {
+  background-color: #4caf50;
+  color: #fff;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 16px;
+  transition: background-color 0.3s ease;
+}
+
+.proceed-to-payment-button:hover {
+  background-color: #45a049;
+}
   .cart-container {
     max-width: 800px;
     margin: 0 auto;

@@ -127,20 +127,20 @@ export default {
       return useProductStore().cartItems;
     },
     totalAmount() {
-      return this.cartItems.reduce((total, item) => {
-        // Remove the dollar sign and parse the price as a float
-        const itemPrice = parseFloat(item.price.replace('$', ''));
-        const itemQuantity = item.quantity;
+  return this.cartItems.reduce((total, item) => {
+    const itemPrice = parseFloat(item.price.replace(/[^\d.]/g, '')) || 0; // Remove non-digit characters
+    const itemQuantity = item.quantity;
 
-        // Check if itemPrice is a valid number
-        if (!isNaN(itemPrice)) {
-          return total + itemPrice * itemQuantity;
-        } else {
-          console.error(`Invalid price for item ${item.name}: ${item.price}`);
-          return total;
-        }
-      }, 0).toFixed(2);
-    },
+    if (!isNaN(itemPrice)) {
+      return total + itemPrice * itemQuantity;
+    } else {
+      console.error(`Invalid price for item ${item.name}: ${item.price}`);
+      return total;
+    }
+  }, 0).toFixed(2);
+},
+
+
   },
   methods: {
     addToCart(product) {
@@ -155,9 +155,11 @@ export default {
     },
   },
   created() {
-    useProductStore().initializeStore(); // Fetch data from local storage
+    useProductStore().initializeStore(); 
     useProductStore().fetchProducts();
     useProductStore().fetchCategories();
+
+    
   },
 };
 </script>

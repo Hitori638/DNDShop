@@ -3,6 +3,9 @@ import HomeView from '../views/HomeView.vue';
 import ProductView from '../views/ProductView.vue';
 import CartView from '../views/Cartview.vue';
 import CategoryView from '../views/CategoryView.vue';
+import CheckoutView from '../views/CheckoutView.vue';
+import PaymentView from '../views/PaymentView.vue';
+import SuccessView from '../views/SuccessView.vue';
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -26,6 +29,21 @@ const router = createRouter({
       path: '/category/:categoryName',
       name: 'category-view',
       component: CategoryView,
+    },
+    {
+      path: '/checkout',
+      name: 'checkout-view',
+      component: CheckoutView,
+    },
+    {
+      path: '/payment',
+      name: 'payment-view',
+      component: PaymentView,
+    },
+    {
+      path: '/thank-you',
+      name: 'success-view',
+      component: SuccessView,
     },
   
   ],
