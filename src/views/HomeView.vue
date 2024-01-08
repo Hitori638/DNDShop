@@ -1,6 +1,6 @@
 <template>
   <v-app>
-    <Navbar @toggle-cart="toggleCartDrawer" :currentCategory="currentCategory" />
+    <Navbar @toggle-cart="toggleCartDrawer" />
     <Slideshow />
     <v-container class="mt-8">
       <!-- Special offers -->
@@ -40,29 +40,22 @@
       </v-row>
     </v-container>
 
-    <!-- Category cards -->
-    <v-row class="mt-4">
-      <v-col
-        v-for="category in categories.filter(cat => cat !== 'HOME')"
-        :key="category"
-        cols="12"
-        md="4"
-        lg="4"
-        class="category-card"
-      >
-        <category-card :category="{ name: category, image: 'https://via.placeholder.com/400x300' }" @view-category="navigate" />
-      </v-col>
-    </v-row>
+    
 
-   <!-- Cart Drawer -->
+  <!-- Cart Drawer -->
 <v-navigation-drawer location="right" v-model="isCartDrawerOpen" app right temporary>
   <v-container>
     <h2>Your Shopping Cart</h2>
     <v-list>
       <v-list-item-group v-if="cartItems.length > 0">
         <v-list-item v-for="item in cartItems" :key="item.id">
-          <v-list-item-content>
-            {{ item.name }} - {{ item.price }} - Quantity: {{ item.quantity }}
+          <v-list-item-content class="cart-item-content">
+            <v-img :src="item.image" height="50" contain></v-img>
+            <div class="cart-item-details">
+              <div>{{ item.name }}</div>
+              <div>Price: {{ item.price }}</div>
+              <div>Quantity: {{ item.quantity }}</div>
+            </div>
           </v-list-item-content>
         </v-list-item>
       </v-list-item-group>
@@ -83,6 +76,8 @@
   </v-container>
 </v-navigation-drawer>
 
+
+<Footer />
   </v-app>
 </template>
 
@@ -92,6 +87,7 @@ import CategoryCard from '@/components/CategoryCard.vue';
 import Navbar from '@/components/Navbar.vue';
 import { useProductStore } from '@/stores/store';
 import Slideshow from '@/components/Slideshow.vue';
+import Footer from '@/components/Footer.vue';
 
 export default {
   name: "HomeView",
@@ -100,11 +96,12 @@ export default {
     CategoryCard,
     Navbar,
     Slideshow,
+    Footer,
   },
   data() {
     return {
       isCartDrawerOpen: false,
-      currentCategory: "HOME",
+      currentCategory: "home",
     };
   },
   computed: {
@@ -130,48 +127,53 @@ export default {
       return useProductStore().cartItems;
     },
     totalAmount() {
-  return this.cartItems.reduce((total, item) => {
-    // Remove the dollar sign and parse the price as a float
-    const itemPrice = parseFloat(item.price.replace('$', ''));
+      return this.cartItems.reduce((total, item) => {
+        // Remove the dollar sign and parse the price as a float
+        const itemPrice = parseFloat(item.price.replace('$', ''));
+        const itemQuantity = item.quantity;
 
-    const itemQuantity = item.quantity;
-
-    // Check if itemPrice is a valid number
-    if (!isNaN(itemPrice)) {
-      return total + itemPrice * itemQuantity;
-    } else {
-      console.error(`Invalid price for item ${item.name}: ${item.price}`);
-      return total;
-    }
-  }, 0).toFixed(2);
-},
-
-
+        // Check if itemPrice is a valid number
+        if (!isNaN(itemPrice)) {
+          return total + itemPrice * itemQuantity;
+        } else {
+          console.error(`Invalid price for item ${item.name}: ${item.price}`);
+          return total;
+        }
+      }, 0).toFixed(2);
+    },
   },
   methods: {
     addToCart(product) {
-      // Add the product with quantity set to 1
       useProductStore().addToCart({ ...product, quantity: 1 });
     },
     proceedToCheckout() {
       this.$router.push('/cart');
     },
-    navigate(category) {
-      this.currentCategory = category;
-    },
+    
     toggleCartDrawer() {
       this.isCartDrawerOpen = !this.isCartDrawerOpen;
     },
   },
   created() {
+    useProductStore().initializeStore(); // Fetch data from local storage
     useProductStore().fetchProducts();
     useProductStore().fetchCategories();
   },
 };
 </script>
 
+
 <style scoped>
 .product-card {
-  margin-bottom: 20px; 
+  margin-bottom: 20px;
+}
+
+.cart-item-content {
+  display: flex;
+  align-items: center;
+}
+
+.cart-item-details {
+  margin-left: 10px;
 }
 </style>

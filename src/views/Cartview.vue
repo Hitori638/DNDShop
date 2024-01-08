@@ -29,17 +29,20 @@
         </div>
       </div>
     </div>
+    <Footer />
 </v-app>
   </template>
   
   <script>
   import { useProductStore } from '@/stores/store';
   import Navbar from '@/components/Navbar.vue';
+  import Footer from '@/components/Footer.vue';
   
   export default {
     components: {
-    Navbar,
-  },
+      Navbar,
+      Footer,
+    },
     computed: {
       cartItems() {
         return useProductStore().cartItems;
@@ -48,33 +51,31 @@
         return this.cartItems.reduce((total, item) => total + item.quantity, 0);
       },
       totalPrice() {
-  return this.cartItems.reduce((total, item) => {
-    // Remove the dollar sign and parse the price as a float
-    const itemPrice = parseFloat(item.price.replace('$', ''));
-
-    const itemQuantity = item.quantity;
-
-    // Check if itemPrice is a valid number
-    if (!isNaN(itemPrice)) {
-      return total + itemPrice * itemQuantity;
-    } else {
-      console.error(`Invalid price for item ${item.name}: ${item.price}`);
-      return total;
-    }
-  }, 0).toFixed(2);
-},
-
+        return this.cartItems.reduce((total, item) => {
+          const itemPrice = parseFloat(item.price.replace('$', ''));
+          const itemQuantity = item.quantity;
+  
+          if (!isNaN(itemPrice)) {
+            return total + itemPrice * itemQuantity;
+          } else {
+            console.error(`Invalid price for item ${item.name}: ${item.price}`);
+            return total;
+          }
+        }, 0).toFixed(2);
+      },
     },
     methods: {
-  removeFromCart(productId) {
-    useProductStore().removeFromCart(productId);
-  },
-},
+      removeFromCart(productId) {
+        useProductStore().removeFromCart(productId);
+      },
+    },
     created() {
       useProductStore().fetchProducts();
+      useProductStore().initializeStore(); // Load cart from local storage
     },
   };
   </script>
+  
   
   <style scoped>
   .cart-container {

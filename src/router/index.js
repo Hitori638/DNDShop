@@ -1,15 +1,15 @@
 import { createRouter, createWebHistory } from 'vue-router';
 import HomeView from '../views/HomeView.vue';
 import ProductView from '../views/ProductView.vue';
-import CartView from '../views/CartView.vue';
-import CategoryView from '../views/CategoryView.vue'; // Correct import path for CategoryView
+import CartView from '../views/Cartview.vue';
+import CategoryView from '../views/CategoryView.vue';
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
     {
       path: '/',
-      name: 'Home',
+      name: 'home',
       component: HomeView,
     },
     {
@@ -27,6 +27,7 @@ const router = createRouter({
       name: 'category-view',
       component: CategoryView,
     },
+  
   ],
 });
 

@@ -53,20 +53,20 @@
           <v-btn color="primary" @click="addToCart" class="add-to-cart-button">Add to Cart</v-btn>
         </div>
       </div>
-      <div v-else>
-        <p>Loading...</p>
-      </div>
     </div>
+    <Footer />
   </v-app>
 </template>
 
 <script>
 import Navbar from '@/components/Navbar.vue'; 
 import { useProductStore } from '../stores/store';
+import Footer from '@/components/Footer.vue';
 
 export default {
   components: {
     Navbar,
+    Footer,
   },
   data() {
     return {
@@ -104,20 +104,26 @@ export default {
 
     },
     proceedToCheckout() {
-     
+    
       this.$router.push('/cart');
-  
 
     },
     toggleCartDrawer() {
       this.isCartDrawerOpen = !this.isCartDrawerOpen;
     },
   },
-  async mounted() {
+  created() {
+    useProductStore().initializeStore();
+  try {
+    useProductStore().fetchProducts();
+    this.product =  useProductStore().getProductById(this.$route.params.productId);
+  } catch (error) {   
+  }
+  
+},
 
-    const productId = this.$route.params.productId;
-    this.product = await useProductStore().getProductById(productId);
-  },
+
+
 };
 </script>
 

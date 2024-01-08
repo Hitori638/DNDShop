@@ -1,34 +1,23 @@
-<!-- Navbar.vue -->
 <template>
   <v-app-bar app color="primary" dark>
     <v-toolbar-title class="mr-4">DnDice.com</v-toolbar-title>
-    
-    <v-btn
-      text
-      v-for="category in categories"
-      :key="category"
-      @click="navigate(category)"
-      :class="{ 'primary--text': currentCategory === category }"
-    >
-      {{ category }}
-    </v-btn>
- 
+
+    <!-- Navbar.vue -->
+
+<v-btn
+  text
+  v-for="category in categories"
+  :key="category"
+  @click="navigate(category)"
+  :class="{ 'primary--text': currentCategory === category }"
+>
+  {{ category }}
+</v-btn>
+
+
     <v-spacer></v-spacer>
 
-    <v-autocomplete
-      v-model="search"
-      :items="filteredProducts"
-      item-text="name"
-      item-value="id"
-      placeholder="Search products"
-      @input="searchProducts"
-    >
-      <template v-slot:selection="{ item }">
-        {{ item.name }}
-      </template>
-    </v-autocomplete>
-
-    <v-btn icon @click="toggleCart" class="ml-2">
+    <v-btn icon @click="toggleCart">
       <v-icon>mdi-cart</v-icon>
       <v-badge :content="totalCartItemsQuantity" overlap color="red" class="ml-2"></v-badge>
     </v-btn>
@@ -42,11 +31,6 @@ export default {
   props: {
     currentCategory: String,
   },
-  data() {
-    return {
-      search: '',
-    };
-  },
   computed: {
     store() {
       return useProductStore();
@@ -54,18 +38,8 @@ export default {
     totalCartItemsQuantity() {
       return this.store.cartItems.reduce((total, item) => total + item.quantity, 0);
     },
-    products() {
-      return this.store.products;
-    },
     categories() {
       return this.store.categories;
-    },
-    filteredProducts() {
-      const searchQuery = this.search ?? '';
-
-      return this.products
-        .filter(product => product.name.toLowerCase().includes(searchQuery.toLowerCase()))
-        .map(product => product.name); 
     },
   },
   methods: {
@@ -73,14 +47,15 @@ export default {
       this.$emit('toggle-cart');
     },
     navigate(category) {
-      // Check if the category is already 'Home', to avoid unnecessary navigation
-      if (category !== 'Home') {
-        this.$router.push({ name: 'Home' });
-      }
-    },
-    searchProducts() {
-      // Add search functionality if needed
-    },
+  if (category.toLowerCase() === 'home') {
+    this.$router.push('/');
+  } else if (category !== this.currentCategory) {
+    // Encode the category name before navigating
+    const encodedCategory = encodeURIComponent(category.toLowerCase());
+    this.$router.push({ name: 'category-view', params: { categoryName: encodedCategory } });
+  }
+},
+
   },
 };
 </script>
