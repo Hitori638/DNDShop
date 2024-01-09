@@ -10,6 +10,9 @@
     <div v-if="cartItems.length > 0">
       <div v-for="item in cartItems" :key="item.id">
         <v-list-item>
+         
+            <v-img :src="item.image" alt="Product Image"></v-img>
+          
           <div>
             {{ item.name }} - {{ item.price }} - Quantity: {{ item.quantity }}
           </div>
@@ -34,6 +37,7 @@
     <v-btn color="primary" @click="proceedToCheckout">Proceed to Checkout</v-btn>
   </v-container>
 </v-navigation-drawer>
+
 
 
 
@@ -143,4 +147,8 @@ export default {
     padding: 8px 12px;
     border-radius: 4px;
     cursor: pointer;
-  }</style>
+  }
+  .product-card {
+    margin-top: 50px; 
+}
+  </style>

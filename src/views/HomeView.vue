@@ -1,7 +1,7 @@
 <template>
   <v-app>
     <Navbar @toggle-cart="toggleCartDrawer" />
-    <Slideshow />
+    <Slideshow class="slideshow" />
     <v-container class="mt-8">
       <!-- Special offers -->
       <v-row class="mt-4">
@@ -39,13 +39,16 @@
 
     
 
-  <!-- Cart Drawer -->
-  <v-navigation-drawer location="right" v-model="isCartDrawerOpen" app right temporary>
+<!-- Cart Drawer -->
+<v-navigation-drawer location="right" v-model="isCartDrawerOpen" app right temporary>
   <v-container>
     <h2>Your Shopping Cart</h2>
     <div v-if="cartItems.length > 0">
       <div v-for="item in cartItems" :key="item.id">
         <v-list-item>
+        
+            <v-img :src="item.image" alt="Product Image"></v-img>
+          
           <div>
             {{ item.name }} - {{ item.price }} - Quantity: {{ item.quantity }}
           </div>
@@ -70,6 +73,7 @@
     <v-btn color="primary" @click="proceedToCheckout">Proceed to Checkout</v-btn>
   </v-container>
 </v-navigation-drawer>
+
 
 
 
@@ -157,6 +161,7 @@ export default {
     useProductStore().initializeStore(); 
     useProductStore().fetchProducts();
     useProductStore().fetchCategories();
+ 
 
     
   },
@@ -186,4 +191,7 @@ export default {
     border-radius: 4px;
     cursor: pointer;
   }
+  .slideshow {
+  margin-top: 100px; 
+}
 </style>

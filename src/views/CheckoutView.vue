@@ -1,6 +1,6 @@
 <template>
     <v-app>
-      <Navbar @toggle-cart="toggleCartDrawer" />
+      <Navbar />
       <v-container class="checkout-container mt-11">
         <v-row>
           <v-col md="6" sm="12">

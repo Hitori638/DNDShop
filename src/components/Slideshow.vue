@@ -1,35 +1,34 @@
 <!-- Slideshow.vue -->
 <template>
-    <div>
-      <v-carousel>
-        <v-carousel-item v-for="(slide, index) in slides" :key="index">
-          <v-img :src="slide.image" height="400" contain></v-img>
-        </v-carousel-item>
-      </v-carousel>
-    </div>
-  </template>
-  
-  <script>
-  export default {
-    data() {
-      return {
-        slides: [
-          {
-            id: 1,
-            image: "https://via.placeholder.com/800x400",
-          },
-          {
-            id: 2,
-            image: "https://via.placeholder.com/800x400",
-          },
+  <div>
+    <v-carousel>
+      <v-carousel-item v-for="(slide, index) in slides" :key="index">
+        <v-img :src="slide.image" height="400" contain></v-img>
+      </v-carousel-item>
+    </v-carousel>
+  </div>
+</template>
 
-        ],
-      };
-    },
-  };
-  </script>
-  
-  <style scoped>
+<script>
+import { useProductStore } from '@/stores/store';
 
-  </style>
-  
+export default {
+  data() {
+    return {
+      slides: [""],
+    };
+  },
+  mounted() {
+
+    const productStore = useProductStore();
+    productStore.fetchSlides();
+
+
+    this.slides = productStore.slides;
+  },
+};
+</script>
+
+<style scoped>
+
+</style>

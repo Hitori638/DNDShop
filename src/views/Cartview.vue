@@ -1,6 +1,6 @@
 <template>
   <v-app>
-    <Navbar @toggle-cart="toggleCartDrawer" />
+    <Navbar />
     <div class="cart-container">
       <h2>Your Cart</h2>
       <div v-if="cartItems.length === 0" class="empty-cart">
@@ -16,9 +16,8 @@
             <p class="item-description">{{ item.description }}</p>
             <div class="item-price">
               <p>Price: {{ item.price }}</p>
-              <label>Quantity: </label>
-              <input type="number" v-model="item.quantity" min="1" />
             </div>
+            <p>Quantity: {{ item.quantity }} </p>
             <button @click="removeFromCart(item.id)" class="remove-button">Remove</button>
           </div>
         </div>

@@ -21,6 +21,8 @@
 
 
 <script>
+import { useProductStore } from '@/stores/store';
+
 export default {
   props: {
     product: {
@@ -30,7 +32,8 @@ export default {
   },
   methods: {
     addToCart() {
-      this.$emit('add-to-cart', this.product);
+      const quantity = 1;
+      useProductStore().addToCart({ ...this.product, quantity });
     },
     redirectToProductView() {
       this.$router.push({ name: 'product-view', params: { productId: this.product.id } });
