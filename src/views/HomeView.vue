@@ -5,18 +5,15 @@
     <v-container class="mt-8">
       <!-- Special offers -->
       <v-row class="mt-4">
-        <v-col v-for="offer in specialOffers" :key="offer.id" cols="12" md="12" lg="12">
-          <v-card class="pa-4 special-offer-card" style="background-color: #ff0000;">
-            <v-img :src="offer.image" height="300" contain></v-img>
-            <v-card-title class="mt-2">{{ offer.name }}</v-card-title>
-            <v-card-subtitle>{{ offer.discountedPrice }} <span class="discounted-price">{{ offer.price }}</span></v-card-subtitle>
-            <v-card-text>{{ offer.description }}</v-card-text>
-            <v-card-actions>
-              <v-btn text color="primary">View Offer</v-btn>
-            </v-card-actions>
-          </v-card>
+    <v-col cols="12">
+      <h2 class="text-center mb-5">Our Hottest Offers</h2>
+      <v-row >
+        <v-col v-for="offer in specialOffers" :key="offer.id" cols="12" md="4">
+          <ProductCard height="520" :product="offer" @add-to-cart="addToCart" />
         </v-col>
       </v-row>
+    </v-col>
+  </v-row>
 
       <!-- Welcome -->
       <v-row>
@@ -43,38 +40,37 @@
     
 
   <!-- Cart Drawer -->
-<v-navigation-drawer location="right" v-model="isCartDrawerOpen" app right temporary>
+  <v-navigation-drawer location="right" v-model="isCartDrawerOpen" app right temporary>
   <v-container>
     <h2>Your Shopping Cart</h2>
-    <v-list>
-      <v-list-item-group v-if="cartItems.length > 0">
-        <v-list-item v-for="item in cartItems" :key="item.id">
-          <v-list-item-content class="cart-item-content">
-            <v-img :src="item.image" height="50" contain></v-img>
-            <div class="cart-item-details">
-              <div>{{ item.name }}</div>
-              <div>Price: {{ item.price }}</div>
-              <div>Quantity: {{ item.quantity }}</div>
-            </div>
-          </v-list-item-content>
+    <div v-if="cartItems.length > 0">
+      <div v-for="item in cartItems" :key="item.id">
+        <v-list-item>
+          <div>
+            {{ item.name }} - {{ item.price }} - Quantity: {{ item.quantity }}
+          </div>
+          <v-list-item-action>
+            <button @click="removeFromCart(item.id)" class="remove-button">Remove</button>
+          </v-list-item-action>
         </v-list-item>
-      </v-list-item-group>
-      <v-list-item v-else>
-        <v-list-item-content>No items in the cart</v-list-item-content>
-      </v-list-item>
-    </v-list>
+      </div>
+    </div>
+    <v-list-item v-else>
+      <div>No items in the cart</div>
+    </v-list-item>
     <v-divider></v-divider>
     <v-list>
       <v-list-item>
-        <v-list-item-content>
+        <div>
           <v-list-item-title>Total Amount:</v-list-item-title>
           <v-list-item-subtitle>${{ totalAmount }}</v-list-item-subtitle>
-        </v-list-item-content>
+        </div>
       </v-list-item>
     </v-list>
     <v-btn color="primary" @click="proceedToCheckout">Proceed to Checkout</v-btn>
   </v-container>
 </v-navigation-drawer>
+
 
 
 <Footer />
@@ -109,16 +105,16 @@ export default {
       return useProductStore().products.slice(0, 3);
     },
     specialOffers() {
-      return [
-        {
-          id: 1,
-          name: "Special Offer 1",
-          price: "$29.99",
-          discountedPrice: "$19.99",
-          description: "Limited time offer! Grab it now!",
-          image: "https://via.placeholder.com/600x400",
-        },
-      ];
+      const sortedProducts = useProductStore().products
+        .filter(product => product.offer)
+        .sort((a, b) => {
+          const discountA = (parseFloat(a.defaultPrice.replace(/[^\d.]/g, '')) - parseFloat(a.price.replace(/[^\d.]/g, ''))) || 0;
+          const discountB = (parseFloat(b.defaultPrice.replace(/[^\d.]/g, '')) - parseFloat(b.price.replace(/[^\d.]/g, ''))) || 0;
+
+          return discountB - discountA;
+        });
+
+      return sortedProducts.slice(0, 3);
     },
     categories() {
       return useProductStore().categories;
@@ -128,7 +124,7 @@ export default {
     },
     totalAmount() {
   return this.cartItems.reduce((total, item) => {
-    const itemPrice = parseFloat(item.price.replace(/[^\d.]/g, '')) || 0; // Remove non-digit characters
+    const itemPrice = parseFloat(item.price.replace(/[^\d.]/g, '')) || 0; 
     const itemQuantity = item.quantity;
 
     if (!isNaN(itemPrice)) {
@@ -152,6 +148,9 @@ export default {
     
     toggleCartDrawer() {
       this.isCartDrawerOpen = !this.isCartDrawerOpen;
+    },
+    removeFromCart(productId) {
+      useProductStore().removeFromCart(productId);
     },
   },
   created() {
@@ -178,4 +177,13 @@ export default {
 .cart-item-details {
   margin-left: 10px;
 }
+.remove-button {
+    margin-left: auto;
+    background-color: #e74c3c;
+    color: #fff;
+    border: none;
+    padding: 8px 12px;
+    border-radius: 4px;
+    cursor: pointer;
+  }
 </style>

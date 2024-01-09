@@ -19,16 +19,6 @@
   </v-card>
 </template>
 
-<style scoped>
-.default-price {
-  text-decoration: line-through;
-  color: grey;
-}
-
-.sale-info {
-  color: rgb(255, 0, 0); 
-}
-</style>
 
 <script>
 export default {
@@ -54,3 +44,14 @@ export default {
   },
 };
 </script>
+
+<style scoped>
+.default-price {
+  text-decoration: line-through;
+  color: grey;
+}
+
+.sale-info {
+  color: rgb(255, 0, 0); 
+}
+</style>

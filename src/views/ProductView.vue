@@ -3,35 +3,39 @@
     <div class="product-details">
       <Navbar @toggle-cart="toggleCartDrawer" />
 
-  
-       <!-- Cart Drawer -->
+<!-- Cart Drawer -->
 <v-navigation-drawer location="right" v-model="isCartDrawerOpen" app right temporary>
   <v-container>
     <h2>Your Shopping Cart</h2>
-    <v-list>
-      <v-list-item-group v-if="cartItems.length > 0">
-        <v-list-item v-for="item in cartItems" :key="item.id">
-          <v-list-item-content>
+    <div v-if="cartItems.length > 0">
+      <div v-for="item in cartItems" :key="item.id">
+        <v-list-item>
+          <div>
             {{ item.name }} - {{ item.price }} - Quantity: {{ item.quantity }}
-          </v-list-item-content>
+          </div>
+          <v-list-item-action>
+            <button @click="removeFromCart(item.id)" class="remove-button">Remove</button>
+          </v-list-item-action>
         </v-list-item>
-      </v-list-item-group>
-      <v-list-item v-else>
-        <v-list-item-content>No items in the cart</v-list-item-content>
-      </v-list-item>
-    </v-list>
+      </div>
+    </div>
+    <v-list-item v-else>
+      <div>No items in the cart</div>
+    </v-list-item>
     <v-divider></v-divider>
     <v-list>
       <v-list-item>
-        <v-list-item-content>
+        <div>
           <v-list-item-title>Total Amount:</v-list-item-title>
           <v-list-item-subtitle>${{ totalAmount }}</v-list-item-subtitle>
-        </v-list-item-content>
+        </div>
       </v-list-item>
     </v-list>
     <v-btn color="primary" @click="proceedToCheckout">Proceed to Checkout</v-btn>
   </v-container>
 </v-navigation-drawer>
+
+
 
       <h2 class="product-title">Product Details</h2>
       <div v-if="product" class="product-container">
@@ -111,6 +115,9 @@ export default {
     toggleCartDrawer() {
       this.isCartDrawerOpen = !this.isCartDrawerOpen;
     },
+    removeFromCart(productId) {
+      useProductStore().removeFromCart(productId);
+    },
   },
   created() {
     useProductStore().initializeStore();
@@ -142,5 +149,14 @@ export default {
   align-items: center;
 }
 
+.remove-button {
+    margin-left: auto;
+    background-color: #e74c3c;
+    color: #fff;
+    border: none;
+    padding: 8px 12px;
+    border-radius: 4px;
+    cursor: pointer;
+  }
 
 </style>

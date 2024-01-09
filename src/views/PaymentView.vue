@@ -5,7 +5,7 @@
         <v-card>
           <v-card-title class="headline z-index-1">Payment Information</v-card-title>
           <v-card-text>
-            <!-- Conditional display of payment form fields -->
+      
             <template v-if="selectedPaymentMethod == 'Credit Card'" >
               <v-row>
                 <v-col md="6" sm="12">
@@ -19,32 +19,32 @@
                 <v-col md="6" sm="12">
                   <v-text-field v-model="cvv" label="CVV"></v-text-field>
                 </v-col>
-                <!-- Add more fields as needed (e.g., cardholder name) -->
+             
               </v-row>
               <v-divider class="my-4"></v-divider>
             </template>
 
             <v-col md="6" sm="12" v-if="selectedPaymentMethod === 'PayPal'">
-              <!-- Show PayPal button -->
+   
               <v-btn color="yellow" @click="payWithPayPal">Pay with PayPal</v-btn>
             </v-col>
-            <!-- Display order summary -->
+        
             <v-card class="mb-4">
               <v-card-title class="headline z-index-1">Order Summary</v-card-title>
               <v-card-text>
                 <p>Total Items: {{ totalItems }}</p>
                 <p>Total Price: ${{ totalPrice }}</p>
-                <!-- Display selected delivery type and payment method -->
+           
                 <p>Delivery Type: {{ selectedDeliveryType }}</p>
                 <p>Payment Method: {{ selectedPaymentMethod }}</p>
-                <!-- Display customer information -->
+         
                 <p>Name: {{ customerInfo.name }} {{ customerInfo.surname }}</p>
                 <p>Email: {{ customerInfo.email }}</p>
                 <p>Phone: {{ customerInfo.phone }}</p>
                 <p>Address: {{ customerInfo.address }}</p>
               </v-card-text>
             </v-card>
-            <!-- Proceed to Confirmation Button -->
+ 
             <v-btn @click="confirmOrder" color="success">
               Confirm Order
             </v-btn>

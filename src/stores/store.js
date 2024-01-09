@@ -24,6 +24,11 @@ export const useProductStore = defineStore('product', {
       this.customerInfo = customerInfo;
     },
 
+    emptyCart() {
+      this.cartItems = [];
+      this.saveCartToLocalStorage();
+    },
+
     generateOrderId() {
     
       const timestamp = new Date().getTime();

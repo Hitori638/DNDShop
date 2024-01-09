@@ -41,31 +41,30 @@
     },
     methods: {
       generateOrderId() {
-        // Call the generateOrderId function from the store
         return useProductStore().generateOrderId();
       },
     },
     created() {
-      // Clear cart and other necessary actions
+
       useProductStore().clearLocalStorage();
-      // You might want to clear other data or perform additional actions after a successful order
+ 
     },
   };
   </script>
   
   <style scoped>
   .success-container {
-    max-width: 1200px; /* Adjust the width as needed */
+    max-width: 1200px; 
     margin: 0 auto;
-    padding: 40px; /* Increase the padding for more space */
+    padding: 40px; 
   }
   
   .custom-card {
-    height: 500px; /* Adjust the height as needed */
+    height: 500px; 
   }
   
   .large-font {
-    font-size: 25px; /* Adjust the font size as needed */
+    font-size: 25px; 
     line-height: 40px;
   }
   </style>

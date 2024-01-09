@@ -22,6 +22,9 @@
             <button @click="removeFromCart(item.id)" class="remove-button">Remove</button>
           </div>
         </div>
+ 
+<button @click="emptyCart" class="empty-cart-button">Empty Cart</button>
+
         <div class="cart-summary">
           <h4>Cart Summary</h4>
           <p>Total Items: {{ totalItems }}</p>
@@ -42,7 +45,7 @@
 import { useProductStore } from '@/stores/store';
 import Navbar from '@/components/Navbar.vue';
 import Footer from '@/components/Footer.vue';
-import { useRouter } from 'vue-router'; // Import the router
+
 
 export default {
   components: {
@@ -75,8 +78,11 @@ export default {
       useProductStore().removeFromCart(productId);
     },
     proceedToPayment() {
-      // Redirect to the checkout view when the payment button is clicked
+
       this.$router.push('/checkout');
+    },
+    emptyCart() {
+      useProductStore().emptyCart();
     },
   },
   created() {
@@ -115,7 +121,19 @@ export default {
     background-color: #f8f8f8;
     border-radius: 8px;
   }
-  
+  .empty-cart-button {
+    background-color: #e74c3c;
+    color: #fff;
+    border: none;
+    padding: 8px 12px;
+    border-radius: 4px;
+    cursor: pointer;
+    margin-top: 10px; 
+  }
+
+  .empty-cart-button:hover {
+    background-color: #c0392b;
+  }
   .cart-item {
     display: flex;
     border: 1px solid #ddd;
