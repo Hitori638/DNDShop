@@ -133,7 +133,7 @@ export default {
   },
   created() {
     useProductStore().initializeStore();
-    this.store.fetchProducts();
+  
   },
 };
 </script>

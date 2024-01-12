@@ -85,7 +85,6 @@ export default {
     },
   },
   created() {
-    useProductStore().fetchProducts();
     useProductStore().initializeStore();
   },
 };

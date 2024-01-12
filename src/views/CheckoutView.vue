@@ -184,7 +184,6 @@
 },
 
     created() {
-      useProductStore().fetchProducts();
       useProductStore().initializeStore();
     },
   };

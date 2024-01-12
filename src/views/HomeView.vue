@@ -159,8 +159,7 @@ export default {
   },
   created() {
     useProductStore().initializeStore(); 
-    useProductStore().fetchProducts();
-    useProductStore().fetchCategories();
+
  
 
     

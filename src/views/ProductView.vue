@@ -141,7 +141,6 @@ export default {
   created() {
   useProductStore().initializeStore();
   try {
-    useProductStore().fetchProducts();
     this.product = useProductStore().getProductById(this.$route.params.productId);
 
   

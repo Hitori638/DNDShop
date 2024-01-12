@@ -25,7 +25,7 @@
 
           <v-row v-if="selectedPaymentMethod === 'PayPal'" class="payment-row">
             <v-col md="6" sm="12">
-              <v-btn color="yellow" @click="payWithPayPal" class="paypal-btn">Pay with PayPal</v-btn>
+              <v-btn color="yellow" class="paypal-btn">Pay with PayPal</v-btn>
             </v-col>
           </v-row>
 
