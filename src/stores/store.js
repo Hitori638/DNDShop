@@ -327,9 +327,6 @@ export const useProductStore = defineStore('product', {
       return product || null;
     },
 
-    fetchCategories() {
-      this.categories = ["HOME", "GEMSTONE DICE", "GLASS DICE", "METAL DICE", "SPECIALIST DICE", "ACCESSORIES", "OFFERS"];
-    },
 
     addToCart(product) {
       const existingProductIndex = this.cartItems.findIndex((p) => p.id === product.id);

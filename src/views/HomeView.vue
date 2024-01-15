@@ -35,8 +35,22 @@
           <product-card :product="product" @add-to-cart="addToCart" />
         </v-col>
       </v-row>
+      <!-- Categories section -->
+
+      <h1 class="display-2 text-center mb-4">Popular categories</h1>
+
+  <v-row class="mt-4">
+    <v-col v-for="category in categories.slice(1)" :key="category" cols="12" md="4">
+      <CategoryCard height= "100" :category="category" @view-category="viewCategory" />
+    </v-col>
+  </v-row>
+
+
+
     </v-container>
 
+
+    
     
 
 <!-- Cart Drawer -->
@@ -155,6 +169,14 @@ export default {
     },
     removeFromCart(productId) {
       useProductStore().removeFromCart(productId);
+    },
+    viewCategory(category) {
+      if (category.toLowerCase() === 'home') {
+        this.$router.push('/');
+      } else if (category !== this.currentCategory) {
+        const encodedCategory = encodeURIComponent(category.toLowerCase());
+        this.$router.push({ name: 'category-view', params: { categoryName: encodedCategory } });
+      }
     },
   },
   created() {
