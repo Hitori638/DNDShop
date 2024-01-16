@@ -47,6 +47,10 @@
     created() {
 
       useProductStore().clearLocalStorage();
+      useProductStore().emptyCart();
+      
+
+
  
     },
   };

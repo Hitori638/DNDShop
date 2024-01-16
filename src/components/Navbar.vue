@@ -1,8 +1,9 @@
+    <!-- Navbar.vue -->
 <template>
   <v-app-bar app color="primary" dark>
     <v-toolbar-title class="mr-4">DnDice.com</v-toolbar-title>
 
-    <!-- Navbar.vue -->
+
 
 <v-btn
   text

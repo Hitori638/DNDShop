@@ -44,14 +44,8 @@
       <CategoryCard height= "100" :category="category" @view-category="viewCategory" />
     </v-col>
   </v-row>
-
-
-
     </v-container>
 
-
-    
-    
 
 <!-- Cart Drawer -->
 <v-navigation-drawer location="right" v-model="isCartDrawerOpen" app right temporary>

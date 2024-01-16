@@ -37,6 +37,7 @@ export default {
     },
     redirectToProductView() {
       this.$router.push({ name: 'product-view', params: { productId: this.product.id } });
+      console.log(this.productId)
     },
     calculateSalePrice(defaultPrice, percentageOff) {
       const price = parseFloat(defaultPrice.replace('$', ''));

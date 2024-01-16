@@ -10,9 +10,7 @@
     <div v-if="cartItems.length > 0">
       <div v-for="item in cartItems" :key="item.id">
         <v-list-item>
-          <v-list-item-avatar>
             <v-img :src="item.image" alt="Product Image"></v-img>
-          </v-list-item-avatar>
           <div>
             {{ item.name }} - {{ item.price }} - Quantity: {{ item.quantity }}
           </div>
@@ -137,23 +135,28 @@ export default {
     filterProductsByCategory(category) {
       return useProductStore().products.filter(product => product.category === category);
     },
+    fetchProduct() {
+    try {
+      this.product = useProductStore().getProductById(this.$route.params.productId);
+
+      if (this.product) {
+        const categoryProducts = this.filterProductsByCategory(this.product.category);
+        this.relatedProducts = categoryProducts.filter(product => product.id !== this.product.id).slice(0, 3);
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  },
   },
   created() {
   useProductStore().initializeStore();
-  try {
-    this.product = useProductStore().getProductById(this.$route.params.productId);
-
-  
-    if (this.product) {
-      const categoryProducts = this.filterProductsByCategory(this.product.category);
-      
-
-      this.relatedProducts = categoryProducts.filter(product => product.id !== this.product.id).slice(0, 3);
-    }
-  } catch (error) {
-    console.error(error);
-  }
+  this.fetchProduct();
 },
+
+watch: {
+  '$route.params.productId': 'fetchProduct',
+},
+
 
 };
 </script>
